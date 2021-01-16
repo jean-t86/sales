@@ -4,7 +4,7 @@
 
 const { assert, expect } = require('chai');
 const Sequelize = require('sequelize');
-const { Product } = require('../../../sequelize/models');
+const { Product } = require('../../../../sequelize/models');
 
 describe('Product sequelize model', function () {
   it('has all the correct properties', function () {

@@ -4,8 +4,8 @@
 
 const sinon = require('sinon');
 const { assert } = require('chai');
-const { Product } = require('../../sequelize/models');
-const ProductRepo = require('../../repos/product-repo.js');
+const { Product } = require('../../../sequelize/models');
+const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('ProductRepo', function () {
   const product = {
@@ -123,9 +123,28 @@ describe('ProductRepo', function () {
   });
 
   describe('update', function () {
-    it('calls findByPk on ProductRepo', async function () {
+    const emptyResult = [
+      0,
+      [],
+    ];
+
+    it('returns null if product not found', async function () {
+      const fake = sinon.fake.returns(emptyResult);
+      sinon.replace(ProductRepo, 'update', fake);
+
+      const result = await ProductRepo.update(
+        product.id,
+        product.name,
+        product.description,
+        product.stock,
+      );
+
+      assert.equal(result, emptyResult);
+    });
+
+    it('calls update on Product model if product found', async function () {
       const fake = sinon.fake();
-      sinon.replace(ProductRepo, 'findByPk', fake);
+      sinon.replace(Product, 'update', fake);
 
       await ProductRepo.update(
         product.id,
@@ -137,42 +156,15 @@ describe('ProductRepo', function () {
       assert.ok(fake.calledOnce);
     });
 
-    it('returns null if product not found', async function () {
-      const fake = sinon.fake();
-      sinon.replace(ProductRepo, 'findByPk', fake);
-
-      const result = await ProductRepo.update(
-        product.id,
-        product.name,
-        product.description,
-        product.stock,
-      );
-
-      assert.equal(result, null);
-    });
-
-    it('calls update on Product model if product found', async function () {
-      const fakeFindByPk = sinon.fake.returns(product);
-      sinon.replace(ProductRepo, 'findByPk', fakeFindByPk);
-
-      const fakeUpdate = sinon.fake();
-      sinon.replace(Product, 'update', fakeUpdate);
-
-      await ProductRepo.update(
-        product.id,
-        product.name,
-        product.description,
-        product.stock,
-      );
-
-      assert.ok(fakeUpdate.calledOnce);
-    });
-
     it('returns the updated product', async function () {
-      const fakeFindByPk = sinon.fake.returns(product);
+      const updateResponse = [
+        1,
+        [product],
+      ];
+      const fakeFindByPk = sinon.fake.returns(updateResponse);
       sinon.replace(ProductRepo, 'findByPk', fakeFindByPk);
 
-      const fakeUpdate = sinon.fake.returns(product);
+      const fakeUpdate = sinon.fake.returns(updateResponse);
       sinon.replace(Product, 'update', fakeUpdate);
 
       const result = await ProductRepo.update(
