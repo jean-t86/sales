@@ -237,4 +237,37 @@ describe('Product route integration test', async function () {
         });
     });
   });
+
+  describe('DELETE product by id', function () {
+    it('returns 400 if id is invalid', function () {
+      const id = 'wer';
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(400);
+    });
+
+    it('returns 404 if product is not found', function () {
+      const id = 100000;
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(404);
+    });
+
+    it('returns 204 on successful delete', async function () {
+      const response = await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+
+      await request(server)
+        .delete(`/products/${response.body.id}`)
+        .expect(204);
+    });
+  });
 });
