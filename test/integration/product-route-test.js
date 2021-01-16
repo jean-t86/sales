@@ -116,4 +116,44 @@ describe('Product route integration test', async function () {
         });
     });
   });
+
+  describe('GET product by id', function () {
+    it('retuns 400 if id is not a number', function () {
+      const id = 'sdf';
+
+      return request(server)
+        .get(`/products/${id}`)
+        .expect(400);
+    });
+
+    it('returns 404 if product not found', function () {
+      const id = 40000;
+
+      return request(server)
+        .get(`/products/${id}`)
+        .expect(404);
+    });
+
+    it('returns a product if found', function () {
+      const id = 2;
+      return request(server)
+        .get(`/products/${id}`)
+        .expect(200)
+        .then((res) => {
+          assert.ok(res.body.name);
+          assert.ok(res.body.description);
+          assert.ok(res.body.stock);
+        });
+    });
+
+    it('returns a product with same id as parameter', function () {
+      const id = 2;
+      return request(server)
+        .get(`/products/${id}`)
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.body.id, id);
+        });
+    });
+  });
 });
