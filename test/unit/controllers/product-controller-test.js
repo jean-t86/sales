@@ -185,68 +185,68 @@ describe('Product controller', function () {
           assert.deepEqual(createdProduct, product);
         });
     });
+  });
 
-    describe('findByPk', function () {
-      it('returns 400 if id is not a number', async function () {
-        const fake = sinon.fake();
-        sinon.replace(ProductRepo, 'findByPk', fake);
-        const id = 'dsf';
+  describe('findByPk', function () {
+    it('returns 400 if id is not a number', async function () {
+      const fake = sinon.fake();
+      sinon.replace(ProductRepo, 'findByPk', fake);
+      const id = 'dsf';
 
-        await request(server)
-          .get(`/products/${id}`)
-          .expect(400);
-      });
+      await request(server)
+        .get(`/products/${id}`)
+        .expect(400);
+    });
 
-      it('returns 404 is findByPk returns null', async function () {
-        const fake = sinon.fake.returns(null);
-        sinon.replace(ProductRepo, 'findByPk', fake);
-        const id = '1';
+    it('returns 404 is findByPk returns null', async function () {
+      const fake = sinon.fake.returns(null);
+      sinon.replace(ProductRepo, 'findByPk', fake);
+      const id = '1';
 
-        await request(server)
-          .get(`/products/${id}`)
-          .expect(404);
-      });
+      await request(server)
+        .get(`/products/${id}`)
+        .expect(404);
+    });
 
-      it('calls findByPk on product repository', async function () {
-        const fake = sinon.fake.returns(product);
-        sinon.replace(ProductRepo, 'findByPk', fake);
-        const id = '1';
+    it('calls findByPk on product repository', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'findByPk', fake);
+      const id = '1';
 
-        await request(server)
-          .get(`/products/${id}`)
-          .expect(200);
+      await request(server)
+        .get(`/products/${id}`)
+        .expect(200);
 
-        assert.ok(fake.calledOnce);
-      });
+      assert.ok(fake.calledOnce);
+    });
 
-      it('calls findByPk with the id as argument', async function () {
-        const fake = sinon.fake.returns(product);
-        sinon.replace(ProductRepo, 'findByPk', fake);
-        const id = '1';
+    it('calls findByPk with the id as argument', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'findByPk', fake);
+      const id = '1';
 
-        await request(server)
-          .get(`/products/${id}`)
-          .expect(200);
+      await request(server)
+        .get(`/products/${id}`)
+        .expect(200);
 
-        assert.equal(fake.getCall(0).args[0], id);
-      });
+      assert.equal(fake.getCall(0).args[0], id);
+    });
 
-      it('returns a product if found', function () {
-        const fake = sinon.fake.returns(product);
-        sinon.replace(ProductRepo, 'findByPk', fake);
-        const id = '1';
+    it('returns a product if found', function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'findByPk', fake);
+      const id = '1';
 
-        return request(server)
-          .get(`/products/${id}`)
-          .expect(200)
-          .then((res) => {
-            const fetchedProduct = res.body;
-            assert.deepEqual(fetchedProduct.id, product.id);
-            assert.deepEqual(fetchedProduct.name, product.name);
-            assert.deepEqual(fetchedProduct.description, product.description);
-            assert.deepEqual(fetchedProduct.stock, product.stock);
-          });
-      });
+      return request(server)
+        .get(`/products/${id}`)
+        .expect(200)
+        .then((res) => {
+          const fetchedProduct = res.body;
+          assert.deepEqual(fetchedProduct.id, product.id);
+          assert.deepEqual(fetchedProduct.name, product.name);
+          assert.deepEqual(fetchedProduct.description, product.description);
+          assert.deepEqual(fetchedProduct.stock, product.stock);
+        });
     });
   });
 });
