@@ -10,15 +10,31 @@ module.exports = {
     }
   },
 
+  validateId(req, res, next, id) {
+    const productId = Number(id);
+    if (productId) {
+      req.body.id = productId;
+      next();
+    } else {
+      res.status(400).send();
+    }
+  },
+
   async findByPk(req, res) {
-    const id = Number(req.params.id);
-    if (id) {
-      const product = await ProductRepo.findByPk(id);
-      if (product) {
-        res.status(200).send(product);
-      } else {
-        res.status(404).send();
-      }
+    const product = await ProductRepo.findByPk(req.body.id);
+    if (product) {
+      res.status(200).send(product);
+    } else {
+      res.status(404).send();
+    }
+  },
+
+  validateProduct(req, res, next) {
+    const { name } = req.body;
+    const stock = Number(req.body.stock);
+
+    if (name && stock) {
+      next();
     } else {
       res.status(400).send();
     }
@@ -29,61 +45,43 @@ module.exports = {
     const { description } = req.body;
     const stock = Number(req.body.stock);
 
-    if (name && stock) {
-      const result = await ProductRepo.create(
-        name,
-        description,
-        stock,
-      );
+    const result = await ProductRepo.create(
+      name,
+      description,
+      stock,
+    );
 
-      if (result) {
-        res.status(201).send(result);
-      } else {
-        res.status(400).send();
-      }
+    if (result) {
+      res.status(201).send(result);
     } else {
       res.status(400).send();
     }
   },
 
   async update(req, res) {
-    const id = Number(req.params.id);
-    if (id) {
-      const { name } = req.body;
-      const { description } = req.body;
-      const { stock } = req.body;
+    const { name } = req.body;
+    const { description } = req.body;
+    const stock = Number(req.body.stock);
 
-      if (name && stock) {
-        const result = await ProductRepo.update(
-          id,
-          name,
-          description,
-          stock,
-        );
-        if (result) {
-          res.status(200).send(result);
-        } else {
-          res.status(404).send();
-        }
-      } else {
-        res.status(400).send();
-      }
+    const result = await ProductRepo.update(
+      req.body.id,
+      name,
+      description,
+      stock,
+    );
+    if (result) {
+      res.status(200).send(result);
     } else {
-      res.status(400).send();
+      res.status(404).send();
     }
   },
 
   async delete(req, res) {
-    const id = Number(req.params.id);
-    if (id) {
-      const result = await ProductRepo.delete(id);
-      if (result) {
-        res.status(204).send();
-      } else {
-        res.status(404).send();
-      }
+    const result = await ProductRepo.delete(req.body.id);
+    if (result) {
+      res.status(204).send();
     } else {
-      res.status(400).send();
+      res.status(404).send();
     }
   },
 };
