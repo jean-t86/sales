@@ -9,5 +9,6 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/products', ProductController.findAll);
+router.post('/products', ProductController.create);
 
 module.exports = router;

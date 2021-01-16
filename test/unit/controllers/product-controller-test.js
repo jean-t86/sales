@@ -79,4 +79,111 @@ describe('Product controller', function () {
       assert.deepEqual(response.body, products);
     });
   });
+
+  describe('create', function () {
+    it('calls create on ProductRepo', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls create with the correct arguments', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+
+      assert.deepEqual(fake.getCall(0).args[0], product.name);
+      assert.deepEqual(fake.getCall(0).args[1], product.description);
+      assert.deepEqual(fake.getCall(0).args[2], product.stock);
+    });
+
+    it('returns 400 if name is undefined', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if stock is undefined', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if stock is not a number', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: 'sdf',
+        })
+        .expect(400);
+    });
+
+    it('returns 200 if description is missing', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          stock: product.stock,
+        })
+        .expect(200);
+    });
+
+    it('returns the created product', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'create', fake);
+
+      await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200)
+        .then((res) => {
+          const createdProduct = res.body;
+          assert.deepEqual(createdProduct, product);
+        });
+    });
+  });
 });
