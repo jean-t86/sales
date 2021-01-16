@@ -10,6 +10,20 @@ module.exports = {
     }
   },
 
+  async findByPk(req, res) {
+    const id = Number(req.params.id);
+    if (id) {
+      const product = await ProductRepo.findByPk(id);
+      if (product) {
+        res.status(200).send(product);
+      } else {
+        res.status(404).send();
+      }
+    } else {
+      res.status(400).send();
+    }
+  },
+
   async create(req, res) {
     const { name } = req.body;
     const { description } = req.body;
