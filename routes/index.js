@@ -8,10 +8,11 @@ router.get('/', (req, res, next) => {
   res.render('index', { title: 'Express' });
 });
 
+router.param('id', ProductController.validateId);
 router.get('/products', ProductController.findAll);
 router.get('/products/:id', ProductController.findByPk);
-router.post('/products', ProductController.create);
-router.put('/products/:id', ProductController.update);
+router.post('/products', ProductController.validateProduct, ProductController.create);
+router.put('/products/:id', ProductController.validateProduct, ProductController.update);
 router.delete('/products/:id', ProductController.delete);
 
 module.exports = router;
