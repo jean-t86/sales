@@ -19,4 +19,18 @@ module.exports = {
     });
     return product;
   },
+
+  async update(id, name, description, stock) {
+    const product = this.findByPk(id);
+    let result = null;
+    if (product) {
+      result = await Product.update({
+        name,
+        description,
+        stock,
+      });
+    }
+
+    return result;
+  },
 };
