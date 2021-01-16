@@ -54,7 +54,7 @@ module.exports = {
       const { stock } = req.body;
 
       if (name && stock) {
-        const result = ProductRepo.update(
+        const result = await ProductRepo.update(
           id,
           name,
           description,

@@ -21,17 +21,22 @@ module.exports = {
   },
 
   async update(id, name, description, stock) {
-    const product = this.findByPk(id);
-    let result = null;
-    if (product) {
-      result = await Product.update({
+    const result = await Product.update(
+      {
         name,
         description,
         stock,
-      });
-    }
+      },
+      {
+        where: {
+          id,
+        },
+        returning: true,
+      },
+    );
 
-    return result;
+    if (result && result[0]) return result[1][0];
+    return null;
   },
 
   async delete(id) {

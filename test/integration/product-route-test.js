@@ -156,4 +156,85 @@ describe('Product route integration test', async function () {
         });
     });
   });
+
+  describe('PUT product by id', function () {
+    it('returns 400 if id is not a number', function () {
+      const id = 4;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .expect(400);
+    });
+
+    it('returns 400 if name is missing', function () {
+      const id = 4;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if stock is missing', function () {
+      const id = 4;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+        })
+        .expect(400);
+    });
+
+    it('returns 404 if product is not found', function () {
+      const id = 40000;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(404);
+    });
+
+    it('returns the updated product', function () {
+      const id = 2;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.deepEqual(res.body.name, product.name);
+          assert.deepEqual(res.body.description, product.description);
+          assert.deepEqual(res.body.stock, product.stock);
+        });
+    });
+
+    it('returns the udpated product with the same is passed in', function () {
+      const id = 2;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.body.id, id);
+        });
+    });
+  });
 });
