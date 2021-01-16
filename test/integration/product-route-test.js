@@ -72,7 +72,7 @@ describe('Product route integration test', async function () {
         .expect(400);
     });
 
-    it('returns 200 when name and stock are not missing', async function () {
+    it('returns 201 when name and stock are not missing', async function () {
       await request(server)
         .post('/products')
         .send({
@@ -80,7 +80,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
     });
 
     it('returns the created product', function () {
@@ -91,7 +91,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200)
+        .expect(201)
         .then((res) => {
           const createdProduct = res.body;
           assert.deepEqual(createdProduct.name, product.name);
@@ -108,7 +108,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200)
+        .expect(201)
         .then((res) => {
           const createdProduct = res.body;
           expect(createdProduct).to.haveOwnProperty('id');
@@ -142,7 +142,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       const response = await request(server)
         .get(`/products/${newProduct.body.id}`)
@@ -161,7 +161,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       const response = await request(server)
         .get(`/products/${newProduct.body.id}`)
@@ -173,7 +173,7 @@ describe('Product route integration test', async function () {
   describe('PUT product by id', function () {
     const updatedProduct = {
       name: 'iPad Air',
-      description: 'The newest iPhone',
+      description: 'The newest iPad',
       stock: 5,
     };
 
@@ -230,7 +230,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       const response = await request(server)
         .put(`/products/${newProductRes.body.id}`)
@@ -254,7 +254,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       const response = await request(server)
         .put(`/products/${newProductRes.body.id}`)
@@ -294,7 +294,7 @@ describe('Product route integration test', async function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       await request(server)
         .delete(`/products/${response.body.id}`)
