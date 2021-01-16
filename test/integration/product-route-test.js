@@ -134,30 +134,49 @@ describe('Product route integration test', async function () {
         .expect(404);
     });
 
-    it('returns a product if found', function () {
-      const id = 2;
-      return request(server)
-        .get(`/products/${id}`)
-        .expect(200)
-        .then((res) => {
-          assert.ok(res.body.name);
-          assert.ok(res.body.description);
-          assert.ok(res.body.stock);
-        });
+    it('returns a product if found', async function () {
+      const newProduct = await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+
+      const response = await request(server)
+        .get(`/products/${newProduct.body.id}`)
+        .expect(200);
+
+      assert.ok(response.body.name);
+      assert.ok(response.body.description);
+      assert.ok(response.body.stock);
     });
 
-    it('returns a product with same id as parameter', function () {
-      const id = 2;
-      return request(server)
-        .get(`/products/${id}`)
-        .expect(200)
-        .then((res) => {
-          assert.equal(res.body.id, id);
-        });
+    it('returns a product with same id as parameter', async function () {
+      const newProduct = await request(server)
+        .post('/products')
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+
+      const response = await request(server)
+        .get(`/products/${newProduct.body.id}`)
+        .expect(200);
+      assert.equal(response.body.id, newProduct.body.id);
     });
   });
 
   describe('PUT product by id', function () {
+    const updatedProduct = {
+      name: 'iPad Air',
+      description: 'The newest iPhone',
+      stock: 5,
+    };
+
     it('returns 400 if id is not a number', function () {
       const id = 4;
 
@@ -203,38 +222,50 @@ describe('Product route integration test', async function () {
         .expect(404);
     });
 
-    it('returns the updated product', function () {
-      const id = 2;
-
-      return request(server)
-        .put(`/products/${id}`)
+    it('returns the updated product', async function () {
+      const newProductRes = await request(server)
+        .post('/products')
         .send({
           name: product.name,
           description: product.description,
           stock: product.stock,
         })
-        .expect(200)
-        .then((res) => {
-          assert.deepEqual(res.body.name, product.name);
-          assert.deepEqual(res.body.description, product.description);
-          assert.deepEqual(res.body.stock, product.stock);
-        });
+        .expect(200);
+
+      const response = await request(server)
+        .put(`/products/${newProductRes.body.id}`)
+        .send({
+          name: updatedProduct.name,
+          description: updatedProduct.description,
+          stock: updatedProduct.stock,
+        })
+        .expect(200);
+
+      assert.deepEqual(response.body.name, updatedProduct.name);
+      assert.deepEqual(response.body.description, updatedProduct.description);
+      assert.deepEqual(response.body.stock, updatedProduct.stock);
     });
 
-    it('returns the udpated product with the same is passed in', function () {
-      const id = 2;
-
-      return request(server)
-        .put(`/products/${id}`)
+    it('returns the udpated product with the same is passed in', async function () {
+      const newProductRes = await request(server)
+        .post('/products')
         .send({
           name: product.name,
           description: product.description,
           stock: product.stock,
         })
-        .expect(200)
-        .then((res) => {
-          assert.equal(res.body.id, id);
-        });
+        .expect(200);
+
+      const response = await request(server)
+        .put(`/products/${newProductRes.body.id}`)
+        .send({
+          name: updatedProduct.name,
+          description: updatedProduct.description,
+          stock: updatedProduct.stock,
+        })
+        .expect(200);
+
+      assert.equal(response.body.id, newProductRes.body.id);
     });
   });
 
