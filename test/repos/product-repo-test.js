@@ -14,6 +14,10 @@ describe('ProductRepo', function () {
     stock: 12,
   };
 
+  const products = [
+    product,
+  ];
+
   afterEach(function () {
     sinon.restore();
   });
@@ -26,6 +30,16 @@ describe('ProductRepo', function () {
       await ProductRepo.findAll();
 
       assert.ok(fake.calledOnce);
+    });
+
+    it('returns the result of calling findAll on Product model', async function () {
+      const fake = sinon.fake.returns(products);
+      sinon.replace(Product, 'findByPk', fake);
+      const id = 1;
+
+      const result = await ProductRepo.findByPk(id);
+
+      assert.deepEqual(result, products);
     });
   });
 
