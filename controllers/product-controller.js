@@ -37,7 +37,7 @@ module.exports = {
       );
 
       if (result) {
-        res.status(200).send(result);
+        res.status(201).send(result);
       } else {
         res.status(400).send();
       }

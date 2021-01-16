@@ -92,7 +92,7 @@ describe('Product controller', function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       assert.ok(fake.calledOnce);
     });
@@ -108,7 +108,7 @@ describe('Product controller', function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
 
       assert.deepEqual(fake.getCall(0).args[0], product.name);
       assert.deepEqual(fake.getCall(0).args[1], product.description);
@@ -155,7 +155,7 @@ describe('Product controller', function () {
         .expect(400);
     });
 
-    it('returns 200 if description is missing', async function () {
+    it('returns 201 if description is missing', async function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'create', fake);
 
@@ -165,7 +165,7 @@ describe('Product controller', function () {
           name: product.name,
           stock: product.stock,
         })
-        .expect(200);
+        .expect(201);
     });
 
     it('returns the created product', async function () {
@@ -179,7 +179,7 @@ describe('Product controller', function () {
           description: product.description,
           stock: product.stock,
         })
-        .expect(200)
+        .expect(201)
         .then((res) => {
           const createdProduct = res.body;
           assert.deepEqual(createdProduct, product);
