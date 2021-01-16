@@ -11,6 +11,7 @@ describe('ProductRepo', function () {
   const product = {
     id: 1,
     name: 'iPhone 12 Pro',
+    description: 'The newest iPhone',
     stock: 12,
   };
 
@@ -70,6 +71,52 @@ describe('ProductRepo', function () {
       const id = 1;
 
       const result = await ProductRepo.findByPk(id);
+
+      assert.deepEqual(result, product);
+    });
+  });
+
+  describe('create', function () {
+    it('calls create on the Product model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Product, 'create', fake);
+
+      await ProductRepo.create(
+        product.name,
+        product.description,
+        product.stock,
+      );
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls create with the correct arguments', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Product, 'create', fake);
+      const expectedArgs = {
+        name: product.name,
+        description: product.description,
+        stock: product.stock,
+      };
+
+      await ProductRepo.create(
+        product.name,
+        product.description,
+        product.stock,
+      );
+
+      assert.deepEqual(fake.getCall(0).args[0], expectedArgs);
+    });
+
+    it('returns the created product', async function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(Product, 'create', fake);
+
+      const result = await ProductRepo.create(
+        product.name,
+        product.description,
+        product.stock,
+      );
 
       assert.deepEqual(result, product);
     });

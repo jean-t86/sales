@@ -10,4 +10,13 @@ module.exports = {
     const product = await Product.findByPk(id);
     return product;
   },
+
+  async create(name, description, stock) {
+    const product = await Product.create({
+      name,
+      description,
+      stock,
+    });
+    return product;
+  },
 };
