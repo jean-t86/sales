@@ -4,8 +4,8 @@
 
 const sinon = require('sinon');
 const { assert } = require('chai');
-const { Product } = require('../../sequelize/models');
-const ProductRepo = require('../../repos/product-repo.js');
+const { Product } = require('../../../sequelize/models');
+const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('ProductRepo', function () {
   const product = {
