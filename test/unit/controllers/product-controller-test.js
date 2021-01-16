@@ -249,4 +249,104 @@ describe('Product controller', function () {
         });
     });
   });
+
+  describe('update', function () {
+    it('returns 400 if id is not a number', function () {
+      const id = 'dsf';
+
+      return request(server)
+        .put(`/products/${id}`)
+        .expect(400);
+    });
+
+    it('returns 400 if name is missing', function () {
+      const id = 3;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if stock is missing', function () {
+      const id = 3;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+        })
+        .expect(400);
+    });
+
+    it('returns 404 if product cannot be found', function () {
+      const fake = sinon.fake.returns(null);
+      sinon.replace(ProductRepo, 'update', fake);
+      const id = 3;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(404);
+    });
+
+    it('returns 200 if update was successful', function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'update', fake);
+      const id = 3;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200);
+    });
+
+    it('returns the updated product', function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'update', fake);
+      const id = 3;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.deepEqual(res.body, product);
+        });
+    });
+
+    it('returns the same id as the passed parameter', function () {
+      const fake = sinon.fake.returns(product);
+      sinon.replace(ProductRepo, 'update', fake);
+      const id = 1;
+
+      return request(server)
+        .put(`/products/${id}`)
+        .send({
+          name: product.name,
+          description: product.description,
+          stock: product.stock,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.body.id, id);
+        });
+    });
+  });
 });

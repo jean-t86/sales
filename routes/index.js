@@ -11,5 +11,6 @@ router.get('/', (req, res, next) => {
 router.get('/products', ProductController.findAll);
 router.get('/products/:id', ProductController.findByPk);
 router.post('/products', ProductController.create);
+router.put('/products/:id', ProductController.update);
 
 module.exports = router;

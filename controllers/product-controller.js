@@ -45,4 +45,31 @@ module.exports = {
       res.status(400).send();
     }
   },
+
+  async update(req, res) {
+    const id = Number(req.params.id);
+    if (id) {
+      const { name } = req.body;
+      const { description } = req.body;
+      const { stock } = req.body;
+
+      if (name && stock) {
+        const result = ProductRepo.update(
+          id,
+          name,
+          description,
+          stock,
+        );
+        if (result) {
+          res.status(200).send(result);
+        } else {
+          res.status(404).send();
+        }
+      } else {
+        res.status(400).send();
+      }
+    } else {
+      res.status(400).send();
+    }
+  },
 };
