@@ -185,4 +185,26 @@ describe('ProductRepo', function () {
       assert.deepEqual(result, product);
     });
   });
+
+  describe('delete', function () {
+    it('calls destroy on the Product model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Product, 'destroy', fake);
+      const id = 1;
+
+      await ProductRepo.delete(id);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('returns the result of the destory method call', async function () {
+      const fake = sinon.fake.returns(1);
+      sinon.replace(Product, 'destroy', fake);
+      const id = 1;
+
+      const result = await ProductRepo.delete(id);
+
+      assert.equal(result, 1);
+    });
+  });
 });

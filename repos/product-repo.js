@@ -33,4 +33,13 @@ module.exports = {
 
     return result;
   },
+
+  async delete(id) {
+    const result = await Product.destroy({
+      where: {
+        id,
+      },
+    });
+    return result;
+  },
 };
