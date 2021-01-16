@@ -349,4 +349,60 @@ describe('Product controller', function () {
         });
     });
   });
+
+  describe('delete', function () {
+    it('returns 400 if id is not valid', function () {
+      const id = 'wer';
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(400);
+    });
+
+    it('returns 404 if product is not found', function () {
+      const fake = sinon.fake.returns(0);
+      sinon.replace(ProductRepo, 'delete', fake);
+      const id = 1;
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(404);
+    });
+
+    it('calls delete on product repository', function () {
+      const fake = sinon.fake();
+      sinon.replace(ProductRepo, 'delete', fake);
+      const id = 1;
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(404)
+        .then(() => {
+          assert.ok(fake.calledOnce);
+        });
+    });
+
+    it('calls delete on repository with id as parameter', function () {
+      const fake = sinon.fake();
+      sinon.replace(ProductRepo, 'delete', fake);
+      const id = 1;
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(404)
+        .then(() => {
+          assert.equal(fake.getCall(0).args[0], id);
+        });
+    });
+
+    it('returns 204 on successful delete', function () {
+      const fake = sinon.fake.returns(1);
+      sinon.replace(ProductRepo, 'delete', fake);
+      const id = 1;
+
+      return request(server)
+        .delete(`/products/${id}`)
+        .expect(204);
+    });
+  });
 });

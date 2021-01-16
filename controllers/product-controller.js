@@ -72,4 +72,18 @@ module.exports = {
       res.status(400).send();
     }
   },
+
+  async delete(req, res) {
+    const id = Number(req.params.id);
+    if (id) {
+      const result = await ProductRepo.delete(id);
+      if (result) {
+        res.status(204).send();
+      } else {
+        res.status(404).send();
+      }
+    } else {
+      res.status(400).send();
+    }
+  },
 };
