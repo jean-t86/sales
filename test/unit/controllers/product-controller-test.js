@@ -6,7 +6,7 @@ const { before } = require('mocha');
 const { assert } = require('chai');
 const sinon = require('sinon');
 const request = require('supertest');
-const server = require('../../../bin/www');
+const server = require('../../server.js');
 const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('Product controller', function () {

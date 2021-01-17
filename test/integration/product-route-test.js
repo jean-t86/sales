@@ -6,7 +6,7 @@ const { before } = require('mocha');
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
 const request = require('supertest');
-const server = require('../../bin/www');
+const server = require('../server.js');
 
 describe('Product route integration test', async function () {
   const product = {
