@@ -53,7 +53,7 @@ describe('CustomerRepo', function () {
     it('calls findByPk on Customer model', async function () {
       const fake = sinon.fake();
       sinon.replace(Customer, 'findByPk', fake);
-      const id = 1;
+      const { id } = customer;
 
       await CustomerRepo.findByPk(id);
 
@@ -63,7 +63,7 @@ describe('CustomerRepo', function () {
     it('calls findByPk with the id as argument', async function () {
       const fake = sinon.fake();
       sinon.replace(Customer, 'findByPk', fake);
-      const id = 1;
+      const { id } = customer;
 
       await CustomerRepo.findByPk(id);
 
@@ -73,7 +73,7 @@ describe('CustomerRepo', function () {
     it('returns the result of calling findByPk on Customer model', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(Customer, 'findByPk', fake);
-      const id = 1;
+      const { id } = customer;
 
       const result = await CustomerRepo.findByPk(id);
 
@@ -187,7 +187,7 @@ describe('CustomerRepo', function () {
     it('calls destroy on the Customer model', async function () {
       const fake = sinon.fake();
       sinon.replace(Customer, 'destroy', fake);
-      const id = 1;
+      const { id } = customer;
 
       await CustomerRepo.delete(id);
 
@@ -197,7 +197,7 @@ describe('CustomerRepo', function () {
     it('returns the result of the destory method call', async function () {
       const fake = sinon.fake.returns(1);
       sinon.replace(Customer, 'destroy', fake);
-      const id = 1;
+      const { id } = customer;
 
       const result = await CustomerRepo.delete(id);
 

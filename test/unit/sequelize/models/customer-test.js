@@ -5,20 +5,21 @@
 
 const { assert, expect } = require('chai');
 const sinon = require('sinon');
+const faker = require('faker');
 const Sequelize = require('sequelize');
 const { Customer } = require('../../../../sequelize/models');
 
 describe('Customer sequelize model', function () {
   const customer = Customer.build({
-    firstName: 'John',
-    lastName: 'doe',
-    email: 'john_doe@email.com',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
   });
 
   const invalidCustomer = Customer.build({
-    firstName: 'John',
-    lastName: 'doe',
-    email: 'john_doeemail.com',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.lorem.word(),
   });
 
   afterEach(function () {
