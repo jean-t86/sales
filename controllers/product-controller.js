@@ -10,33 +10,12 @@ module.exports = {
     }
   },
 
-  validateId(req, res, next, id) {
-    const productId = Number(id);
-    if (productId) {
-      req.body.id = productId;
-      next();
-    } else {
-      res.status(400).send();
-    }
-  },
-
   async findByPk(req, res) {
     const product = await ProductRepo.findByPk(req.body.id);
     if (product) {
       res.status(200).send(product);
     } else {
       res.status(404).send();
-    }
-  },
-
-  validateProduct(req, res, next) {
-    const { name } = req.body;
-    const stock = Number(req.body.stock);
-
-    if (name && stock) {
-      next();
-    } else {
-      res.status(400).send();
     }
   },
 
