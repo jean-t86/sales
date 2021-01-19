@@ -100,7 +100,7 @@ After creating the database and role, you can now create the tables:
 sequelize db:migrate
 ```
 
-## Running the web server locally
+## Run the web server locally
 
 You can start the server using
 ```
