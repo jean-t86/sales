@@ -56,7 +56,7 @@
         ],
         "summary": "Create a new product",
         "requestBody": {
-          "description": "Product object to be added",
+          "description": "Product object",
           "content": {
             "application/json": {
               "schema": {
@@ -93,7 +93,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The ID of the product to get",
+            "description": "The ID of the product",
             "required": true,
             "style": "simple",
             "explode": true,
@@ -117,7 +117,7 @@
             "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "No product with the given ID was found"
+            "description": "Product not found"
           }
         }
       },
@@ -130,7 +130,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The ID of the product to get",
+            "description": "The ID of the product",
             "required": true,
             "style": "simple",
             "explode": true,
@@ -140,7 +140,7 @@
           }
         ],
         "requestBody": {
-          "description": "Product object to be added",
+          "description": "Product object",
           "content": {
             "application/json": {
               "schema": {
@@ -165,7 +165,7 @@
             "description": "Invalid ID or invalid product supplied"
           },
           "404": {
-            "description": "The product to update was not found"
+            "description": "Product not found"
           }
         }
       },
@@ -178,7 +178,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The ID of the product to get",
+            "description": "The ID of the product",
             "required": true,
             "style": "simple",
             "explode": true,
@@ -195,7 +195,7 @@
             "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "No product with the given ID was found"
+            "description": "Product not found"
           }
         }
       }
