@@ -266,7 +266,7 @@ describe('Product controller', function () {
     });
 
     it('returns 400 if name is missing', function () {
-      const id = 3;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -278,7 +278,7 @@ describe('Product controller', function () {
     });
 
     it('returns 400 if stock is missing', function () {
-      const id = 3;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -292,7 +292,7 @@ describe('Product controller', function () {
     it('returns 404 if product cannot be found', function () {
       const fake = sinon.fake.returns(null);
       sinon.replace(ProductRepo, 'update', fake);
-      const id = 3;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -307,7 +307,7 @@ describe('Product controller', function () {
     it('returns 200 if update was successful', function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'update', fake);
-      const id = 3;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -322,7 +322,7 @@ describe('Product controller', function () {
     it('returns the updated product', function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'update', fake);
-      const id = 3;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -368,7 +368,7 @@ describe('Product controller', function () {
     it('returns 404 if product is not found', function () {
       const fake = sinon.fake.returns(0);
       sinon.replace(ProductRepo, 'delete', fake);
-      const id = 1;
+      const { id } = product;
 
       return request(server)
         .delete(`/products/${id}`)
@@ -378,7 +378,7 @@ describe('Product controller', function () {
     it('calls delete on product repository', function () {
       const fake = sinon.fake();
       sinon.replace(ProductRepo, 'delete', fake);
-      const id = 1;
+      const { id } = product;
 
       return request(server)
         .delete(`/products/${id}`)
@@ -391,7 +391,7 @@ describe('Product controller', function () {
     it('calls delete on repository with id as parameter', function () {
       const fake = sinon.fake();
       sinon.replace(ProductRepo, 'delete', fake);
-      const id = 1;
+      const { id } = product;
 
       return request(server)
         .delete(`/products/${id}`)
@@ -404,7 +404,7 @@ describe('Product controller', function () {
     it('returns 204 on successful delete', function () {
       const fake = sinon.fake.returns(1);
       sinon.replace(ProductRepo, 'delete', fake);
-      const id = 1;
+      const { id } = product;
 
       return request(server)
         .delete(`/products/${id}`)
