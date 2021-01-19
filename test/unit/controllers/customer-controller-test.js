@@ -367,4 +367,60 @@ describe('Customer controller', function () {
         });
     });
   });
+
+  describe('delete', function () {
+    it('returns 400 if id is not valid', function () {
+      const id = 'wer';
+
+      return request(server)
+        .delete(`/customers/${id}`)
+        .expect(400);
+    });
+
+    it('returns 404 if customer is not found', function () {
+      const fake = sinon.fake.returns(0);
+      sinon.replace(CustomerRepo, 'delete', fake);
+      const { id } = customer;
+
+      return request(server)
+        .delete(`/customers/${id}`)
+        .expect(404);
+    });
+
+    it('calls delete on customer repository', function () {
+      const fake = sinon.fake();
+      sinon.replace(CustomerRepo, 'delete', fake);
+      const { id } = customer;
+
+      return request(server)
+        .delete(`/customers/${id}`)
+        .expect(404)
+        .then(() => {
+          assert.ok(fake.calledOnce);
+        });
+    });
+
+    it('calls delete on repository with id as parameter', function () {
+      const fake = sinon.fake();
+      sinon.replace(CustomerRepo, 'delete', fake);
+      const { id } = customer;
+
+      return request(server)
+        .delete(`/customers/${id}`)
+        .expect(404)
+        .then(() => {
+          assert.equal(fake.getCall(0).args[0], id);
+        });
+    });
+
+    it('returns 204 on successful delete', function () {
+      const fake = sinon.fake.returns(1);
+      sinon.replace(CustomerRepo, 'delete', fake);
+      const { id } = customer;
+
+      return request(server)
+        .delete(`/customers/${id}`)
+        .expect(204);
+    });
+  });
 });

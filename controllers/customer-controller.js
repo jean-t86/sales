@@ -54,4 +54,13 @@ module.exports = {
       res.status(404).send();
     }
   },
+
+  async delete(req, res) {
+    const result = await CustomerRepo.delete(req.body.id);
+    if (result) {
+      res.status(204).send();
+    } else {
+      res.status(404).send();
+    }
+  },
 };

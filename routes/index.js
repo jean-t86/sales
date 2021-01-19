@@ -22,5 +22,6 @@ router.get('/customers', CustomerController.findAll);
 router.get('/customers/:id', CustomerController.findByPk);
 router.post('/customers', Validators.validateCustomer, CustomerController.create);
 router.put('/customers/:id', Validators.validateCustomer, CustomerController.update);
+router.delete('/customers/:id', Validators.validateId, CustomerController.delete);
 
 module.exports = router;
