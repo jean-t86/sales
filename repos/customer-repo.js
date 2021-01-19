@@ -19,4 +19,23 @@ module.exports = {
     });
     return customer;
   },
+
+  async update(id, firstName, lastName, email) {
+    const result = await Customer.update(
+      {
+        firstName,
+        lastName,
+        email,
+      },
+      {
+        where: {
+          id,
+        },
+        returning: true,
+      },
+    );
+
+    if (result && result[0]) return result[1][0];
+    return null;
+  },
 };

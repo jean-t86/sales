@@ -126,4 +126,60 @@ describe('CustomerRepo', function () {
       assert.deepEqual(result, customer);
     });
   });
+
+  describe('update', function () {
+    const emptyResult = [
+      0,
+      [],
+    ];
+
+    it('returns null if customer not found', async function () {
+      const fake = sinon.fake.returns(emptyResult);
+      sinon.replace(CustomerRepo, 'update', fake);
+
+      const result = await CustomerRepo.update(
+        customer.id,
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.equal(result, emptyResult);
+    });
+
+    it('calls update on Customer model if customer found', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Customer, 'update', fake);
+
+      await CustomerRepo.update(
+        customer.id,
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('returns the updated customer', async function () {
+      const updateResponse = [
+        1,
+        [customer],
+      ];
+      const fakeFindByPk = sinon.fake.returns(updateResponse);
+      sinon.replace(CustomerRepo, 'findByPk', fakeFindByPk);
+
+      const fakeUpdate = sinon.fake.returns(updateResponse);
+      sinon.replace(Customer, 'update', fakeUpdate);
+
+      const result = await CustomerRepo.update(
+        customer.id,
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.deepEqual(result, customer);
+    });
+  });
 });
