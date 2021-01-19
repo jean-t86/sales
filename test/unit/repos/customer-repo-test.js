@@ -48,4 +48,36 @@ describe('CustomerRepo', function () {
       assert.deepEqual(result, customers);
     });
   });
+
+  describe('findByPk', function () {
+    it('calls findByPk on Customer model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Customer, 'findByPk', fake);
+      const id = 1;
+
+      await CustomerRepo.findByPk(id);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls findByPk with the id as argument', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Customer, 'findByPk', fake);
+      const id = 1;
+
+      await CustomerRepo.findByPk(id);
+
+      assert.equal(fake.getCall(0).args[0], id);
+    });
+
+    it('returns the result of calling findByPk on Customer model', async function () {
+      const fake = sinon.fake.returns(customer);
+      sinon.replace(Customer, 'findByPk', fake);
+      const id = 1;
+
+      const result = await CustomerRepo.findByPk(id);
+
+      assert.deepEqual(result, customer);
+    });
+  });
 });

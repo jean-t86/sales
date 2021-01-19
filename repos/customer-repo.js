@@ -5,4 +5,9 @@ module.exports = {
     const products = await Customer.findAll();
     return products;
   },
+
+  async findByPk(id) {
+    const product = await Customer.findByPk(id);
+    return product;
+  },
 };
