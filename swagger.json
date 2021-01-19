@@ -105,6 +105,51 @@
             "description": "No product with the given ID was found"
           }
         }
+      },
+      "put": {
+        "summary": "Update a product by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the product to get",
+            "required": true,
+            "style": "simple",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Product object to be added",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID or invalid product supplied"
+          },
+          "404": {
+            "description": "The product to update was not found"
+          }
+        }
       }
     }
   },
