@@ -15,8 +15,8 @@ describe('CustomerRepo', function () {
   beforeEach(function () {
     customer = {
       id: faker.random.number(),
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       email: faker.internet.email(),
     };
 

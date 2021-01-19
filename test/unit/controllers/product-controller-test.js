@@ -64,7 +64,7 @@ describe('Product controller', function () {
         .expect(404);
     });
 
-    it('returns 200 ifproducts found', async function () {
+    it('returns 200 if products found', async function () {
       const fake = sinon.fake.returns(products);
       sinon.replace(ProductRepo, 'findAll', fake);
 
