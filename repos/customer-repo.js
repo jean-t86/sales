@@ -38,4 +38,13 @@ module.exports = {
     if (result && result[0]) return result[1][0];
     return null;
   },
+
+  async delete(id) {
+    const result = await Customer.destroy({
+      where: {
+        id,
+      },
+    });
+    return result;
+  },
 };
