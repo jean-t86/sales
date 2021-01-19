@@ -4,20 +4,26 @@
 
 const sinon = require('sinon');
 const { assert } = require('chai');
+const faker = require('faker');
 const { Product } = require('../../../sequelize/models');
 const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('ProductRepo', function () {
-  const product = {
-    id: 1,
-    name: 'iPhone 12 Pro',
-    description: 'The newest iPhone',
-    stock: 12,
-  };
+  let product;
+  let products;
 
-  const products = [
-    product,
-  ];
+  beforeEach(function () {
+    product = {
+      id: faker.random.number(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
+    };
+
+    products = [
+      product,
+    ];
+  });
 
   afterEach(function () {
     sinon.restore();
@@ -35,10 +41,9 @@ describe('ProductRepo', function () {
 
     it('returns the result of calling findAll on Product model', async function () {
       const fake = sinon.fake.returns(products);
-      sinon.replace(Product, 'findByPk', fake);
-      const id = 1;
+      sinon.replace(Product, 'findAll', fake);
 
-      const result = await ProductRepo.findByPk(id);
+      const result = await ProductRepo.findAll();
 
       assert.deepEqual(result, products);
     });
@@ -48,7 +53,7 @@ describe('ProductRepo', function () {
     it('calls findByPk on Product model', async function () {
       const fake = sinon.fake();
       sinon.replace(Product, 'findByPk', fake);
-      const id = 1;
+      const { id } = product;
 
       await ProductRepo.findByPk(id);
 
@@ -58,7 +63,7 @@ describe('ProductRepo', function () {
     it('calls findByPk with the id as argument', async function () {
       const fake = sinon.fake();
       sinon.replace(Product, 'findByPk', fake);
-      const id = 1;
+      const { id } = product;
 
       await ProductRepo.findByPk(id);
 
@@ -68,7 +73,7 @@ describe('ProductRepo', function () {
     it('returns the result of calling findByPk on Product model', async function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(Product, 'findByPk', fake);
-      const id = 1;
+      const { id } = product;
 
       const result = await ProductRepo.findByPk(id);
 
@@ -182,7 +187,7 @@ describe('ProductRepo', function () {
     it('calls destroy on the Product model', async function () {
       const fake = sinon.fake();
       sinon.replace(Product, 'destroy', fake);
-      const id = 1;
+      const { id } = product;
 
       await ProductRepo.delete(id);
 
@@ -192,7 +197,7 @@ describe('ProductRepo', function () {
     it('returns the result of the destory method call', async function () {
       const fake = sinon.fake.returns(1);
       sinon.replace(Product, 'destroy', fake);
-      const id = 1;
+      const { id } = product;
 
       const result = await ProductRepo.delete(id);
 
