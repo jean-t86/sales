@@ -2,12 +2,21 @@ const { Customer } = require('../sequelize/models');
 
 module.exports = {
   async findAll() {
-    const products = await Customer.findAll();
-    return products;
+    const customers = await Customer.findAll();
+    return customers;
   },
 
   async findByPk(id) {
-    const product = await Customer.findByPk(id);
-    return product;
+    const customer = await Customer.findByPk(id);
+    return customer;
+  },
+
+  async create(firstName, lastName, email) {
+    const customer = await Customer.create({
+      firstName,
+      lastName,
+      email,
+    });
+    return customer;
   },
 };

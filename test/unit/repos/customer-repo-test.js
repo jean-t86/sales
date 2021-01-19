@@ -80,4 +80,50 @@ describe('CustomerRepo', function () {
       assert.deepEqual(result, customer);
     });
   });
+
+  describe('create', function () {
+    it('calls create on the Customer model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Customer, 'create', fake);
+
+      await CustomerRepo.create(
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls create with the correct arguments', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Customer, 'create', fake);
+      const expectedArgs = {
+        firstName: customer.firstName,
+        lastName: customer.lastName,
+        email: customer.email,
+      };
+
+      await CustomerRepo.create(
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.deepEqual(fake.getCall(0).args[0], expectedArgs);
+    });
+
+    it('returns the created customer', async function () {
+      const fake = sinon.fake.returns(customer);
+      sinon.replace(Customer, 'create', fake);
+
+      const result = await CustomerRepo.create(
+        customer.firstName,
+        customer.lastName,
+        customer.email,
+      );
+
+      assert.deepEqual(result, customer);
+    });
+  });
 });
