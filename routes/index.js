@@ -16,6 +16,9 @@ router.post('/products', ProductController.validateProduct, ProductController.cr
 router.put('/products/:id', ProductController.validateProduct, ProductController.update);
 router.delete('/products/:id', ProductController.delete);
 
+router.param('id', CustomerController.validateId);
 router.get('/customers', CustomerController.findAll);
+router.get('/customers/:id', CustomerController.findByPk);
+router.post('/customers', CustomerController.validateCustomer, CustomerController.create);
 
 module.exports = router;
