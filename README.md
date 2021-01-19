@@ -4,7 +4,7 @@
 * [Description](#description)
 * [General information](#general-information)
 * [Technologies](#technologies)
-* [Development paragigms](#development-paradigms)
+* [Development paradigms](#development-paradigms)
 * [Installation](#installation)
 * [Running the web server locally](#running-the-web-server-locally)
 
