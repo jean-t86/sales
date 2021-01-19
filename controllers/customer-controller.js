@@ -37,4 +37,21 @@ module.exports = {
     }
   },
 
+  async update(req, res) {
+    const { firstName } = req.body;
+    const { lastName } = req.body;
+    const { email } = req.body;
+
+    const result = await CustomerRepo.update(
+      req.body.id,
+      firstName,
+      lastName,
+      email,
+    );
+    if (result) {
+      res.status(200).send(result);
+    } else {
+      res.status(404).send();
+    }
+  },
 };

@@ -121,7 +121,7 @@ describe('Customer controller', function () {
       assert.deepEqual(fake.getCall(0).args[2], customer.email);
     });
 
-    it('returns 400 if first name is undefined', async function () {
+    it('returns 400 if first firstName is undefined', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'create', fake);
 
@@ -134,7 +134,7 @@ describe('Customer controller', function () {
         .expect(400);
     });
 
-    it('returns 400 if last name is undefined', async function () {
+    it('returns 400 if last firstName is undefined', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'create', fake);
 
@@ -252,6 +252,118 @@ describe('Customer controller', function () {
           assert.deepEqual(fetchedCustomer.firstName, customer.firstName);
           assert.deepEqual(fetchedCustomer.lastName, customer.lastName);
           assert.deepEqual(fetchedCustomer.email, customer.email);
+        });
+    });
+  });
+
+  describe('update', function () {
+    it('returns 400 if id is not a number', function () {
+      const id = 'dsf';
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .expect(400);
+    });
+
+    it('returns 400 if firstName is missing', function () {
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          lastName: customer.lastName,
+          email: customer.email,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if lastName is missing', function () {
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          email: customer.email,
+        })
+        .expect(400);
+    });
+
+    it('returns 400 if email is missing', function () {
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+        })
+        .expect(400);
+    });
+
+    it('returns 404 if customer cannot be found', function () {
+      const fake = sinon.fake.returns(null);
+      sinon.replace(CustomerRepo, 'update', fake);
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+        })
+        .expect(404);
+    });
+
+    it('returns 200 if update was successful', function () {
+      const fake = sinon.fake.returns(customer);
+      sinon.replace(CustomerRepo, 'update', fake);
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+        })
+        .expect(200);
+    });
+
+    it('returns the updated customer', function () {
+      const fake = sinon.fake.returns(customer);
+      sinon.replace(CustomerRepo, 'update', fake);
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.deepEqual(res.body, customer);
+        });
+    });
+
+    it('returns the same id as the passed parameter', function () {
+      const fake = sinon.fake.returns(customer);
+      sinon.replace(CustomerRepo, 'update', fake);
+      const { id } = customer;
+
+      return request(server)
+        .put(`/customers/${id}`)
+        .send({
+          firstName: customer.firstName,
+          lastName: customer.lastName,
+          email: customer.email,
+        })
+        .expect(200)
+        .then((res) => {
+          assert.equal(res.body.id, id);
         });
     });
   });
