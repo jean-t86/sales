@@ -182,7 +182,7 @@ describe('Product route integration test', async function () {
     };
 
     it('returns 400 if id is not a number', function () {
-      const id = 4;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -190,7 +190,7 @@ describe('Product route integration test', async function () {
     });
 
     it('returns 400 if name is missing', function () {
-      const id = 4;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
@@ -202,7 +202,7 @@ describe('Product route integration test', async function () {
     });
 
     it('returns 400 if stock is missing', function () {
-      const id = 4;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
