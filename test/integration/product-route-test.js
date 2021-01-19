@@ -5,16 +5,12 @@
 const { before } = require('mocha');
 const { expect, assert } = require('chai');
 const sinon = require('sinon');
+const faker = require('faker');
 const request = require('supertest');
 const server = require('../server.js');
 
 describe('Product route integration test', async function () {
-  const product = {
-    id: 1,
-    name: 'iPhone 12 Pro',
-    description: 'The newest iPhone',
-    stock: 12,
-  };
+  let product;
 
   before(function (done) {
     if (server.listening) {
@@ -26,6 +22,13 @@ describe('Product route integration test', async function () {
 
   beforeEach(function () {
     server.listen(3000);
+
+    product = {
+      id: faker.random.number(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
+    };
   });
 
   afterEach(function (done) {
@@ -172,9 +175,10 @@ describe('Product route integration test', async function () {
 
   describe('PUT product by id', function () {
     const updatedProduct = {
-      name: 'iPad Air',
-      description: 'The newest iPad',
-      stock: 5,
+      id: faker.random.number(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
     };
 
     it('returns 400 if id is not a number', function () {
