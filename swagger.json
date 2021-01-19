@@ -18,9 +18,18 @@
       "url": "https://radiant-mountain-36050.herokuapp.com/"
     }
   ],
+  "tags": [
+    {
+      "name": "products",
+      "description": "CRUD operations for the products"
+    }
+  ],
   "paths": {
     "/products": {
       "get": {
+        "tags": [
+          "products"
+        ],
         "summary": "Get a list of all products",
         "responses": {
           "200": {
@@ -42,6 +51,9 @@
         }
       },
       "post": {
+        "tags": [
+          "products"
+        ],
         "summary": "Create a new product",
         "requestBody": {
           "description": "Product object to be added",
@@ -73,6 +85,9 @@
     },
     "/products/{id}": {
       "get": {
+        "tags": [
+          "products"
+        ],
         "summary": "Get a product by ID",
         "parameters": [
           {
@@ -107,6 +122,9 @@
         }
       },
       "put": {
+        "tags": [
+          "products"
+        ],
         "summary": "Update a product by ID",
         "parameters": [
           {
@@ -152,6 +170,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "products"
+        ],
         "summary": "Delete a product by ID",
         "parameters": [
           {
