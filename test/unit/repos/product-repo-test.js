@@ -4,20 +4,26 @@
 
 const sinon = require('sinon');
 const { assert } = require('chai');
+const faker = require('faker');
 const { Product } = require('../../../sequelize/models');
 const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('ProductRepo', function () {
-  const product = {
-    id: 1,
-    name: 'iPhone 12 Pro',
-    description: 'The newest iPhone',
-    stock: 12,
-  };
+  let product;
+  let products;
 
-  const products = [
-    product,
-  ];
+  beforeEach(function () {
+    product = {
+      id: faker.random.number(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
+    };
+
+    products = [
+      product,
+    ];
+  });
 
   afterEach(function () {
     sinon.restore();

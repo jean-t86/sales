@@ -5,21 +5,14 @@
 const { before } = require('mocha');
 const { assert } = require('chai');
 const sinon = require('sinon');
+const faker = require('faker');
 const request = require('supertest');
 const server = require('../../server.js');
 const ProductRepo = require('../../../repos/product-repo.js');
 
 describe('Product controller', function () {
-  const product = {
-    id: 1,
-    name: 'iPhone 12 Pro',
-    description: 'The newest iPhone',
-    stock: 12,
-  };
-
-  const products = [
-    product,
-  ];
+  let product;
+  let products;
 
   before(function (done) {
     if (server.listening) {
@@ -27,6 +20,19 @@ describe('Product controller', function () {
     } else {
       done();
     }
+  });
+
+  beforeEach(function () {
+    product = {
+      id: faker.random.number(),
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
+    };
+
+    products = [
+      product,
+    ];
   });
 
   beforeEach(function () {
@@ -334,7 +340,7 @@ describe('Product controller', function () {
     it('returns the same id as the passed parameter', function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'update', fake);
-      const id = 1;
+      const { id } = product;
 
       return request(server)
         .put(`/products/${id}`)
