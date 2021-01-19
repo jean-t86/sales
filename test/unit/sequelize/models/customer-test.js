@@ -10,14 +10,14 @@ const { Customer } = require('../../../../sequelize/models');
 
 describe('Customer sequelize model', function () {
   const customer = Customer.build({
-    first_name: 'John',
-    last_name: 'doe',
+    firstName: 'John',
+    lastName: 'doe',
     email: 'john_doe@email.com',
   });
 
   const invalidCustomer = Customer.build({
-    first_name: 'John',
-    last_name: 'doe',
+    firstName: 'John',
+    lastName: 'doe',
     email: 'john_doeemail.com',
   });
 
@@ -27,8 +27,8 @@ describe('Customer sequelize model', function () {
 
   it('has all the correct properties', function () {
     expect(Customer.tableAttributes).to.have.ownProperty('id');
-    expect(Customer.tableAttributes).to.have.ownProperty('first_name');
-    expect(Customer.tableAttributes).to.have.ownProperty('last_name');
+    expect(Customer.tableAttributes).to.have.ownProperty('firstName');
+    expect(Customer.tableAttributes).to.have.ownProperty('lastName');
     expect(Customer.tableAttributes).to.have.ownProperty('email');
   });
 
@@ -39,14 +39,14 @@ describe('Customer sequelize model', function () {
     assert.ok(Customer.tableAttributes.id.autoIncrement);
   });
 
-  it('has the correct constraint on first_name field', function () {
-    assert.deepEqual(Customer.tableAttributes.first_name.type, Sequelize.DataTypes.STRING());
-    expect(Customer.tableAttributes.first_name.allowNull).to.equal(false);
+  it('has the correct constraint on firstName field', function () {
+    assert.deepEqual(Customer.tableAttributes.firstName.type, Sequelize.DataTypes.STRING());
+    expect(Customer.tableAttributes.firstName.allowNull).to.equal(false);
   });
 
-  it('has the correct constraint on last_name field', function () {
-    assert.deepEqual(Customer.tableAttributes.last_name.type, Sequelize.DataTypes.STRING());
-    expect(Customer.tableAttributes.last_name.allowNull).to.equal(false);
+  it('has the correct constraint on lastName field', function () {
+    assert.deepEqual(Customer.tableAttributes.lastName.type, Sequelize.DataTypes.STRING());
+    expect(Customer.tableAttributes.lastName.allowNull).to.equal(false);
   });
 
   it('has the correct constraint on email field', function () {
