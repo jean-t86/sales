@@ -40,6 +40,35 @@
             "description": "No products found"
           }
         }
+      },
+      "post": {
+        "summary": "Create a new product",
+        "requestBody": {
+          "description": "Product object to be added",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Product"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid product"
+          }
+        }
       }
     },
     "/products/{id}": {
@@ -74,7 +103,7 @@
           },
           "404": {
             "description": "No product with the given ID was found"
-          }          
+          }
         }
       }
     }
