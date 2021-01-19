@@ -41,10 +41,9 @@ describe('ProductRepo', function () {
 
     it('returns the result of calling findAll on Product model', async function () {
       const fake = sinon.fake.returns(products);
-      sinon.replace(Product, 'findByPk', fake);
-      const id = 1;
+      sinon.replace(Product, 'findAll', fake);
 
-      const result = await ProductRepo.findByPk(id);
+      const result = await ProductRepo.findAll();
 
       assert.deepEqual(result, products);
     });
