@@ -134,7 +134,7 @@ describe('Customer controller', function () {
         .expect(400);
     });
 
-    it('returns 400 if last firstName is undefined', async function () {
+    it('returns 400 if lastName is undefined', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'create', fake);
 

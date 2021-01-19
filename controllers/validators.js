@@ -1,8 +1,8 @@
 module.exports = {
   validateId(req, res, next, id) {
-    const productId = Number(id);
-    if (productId) {
-      req.body.id = productId;
+    const resourceId = Number(id);
+    if (resourceId) {
+      req.body.id = resourceId;
       next();
     } else {
       res.status(400).send();
