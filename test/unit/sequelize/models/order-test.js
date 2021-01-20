@@ -27,5 +27,8 @@ describe('Order sequelize model', function () {
     expect(Order.associations).to.have.ownProperty('Customer');
     expect(Order.associations.Customer.associationAccessor).to.equal('Customer');
     expect(Order.associations.Customer.associationType).to.equal('BelongsTo');
+    expect(Order.associations.Customer.foreignKey).to.equal('customerId');
+    expect(Order.associations.Customer.options.onDelete).to.equal('CASCADE');
+    expect(Order.associations.Customer.options.onUpdate).to.equal('CASCADE');
   });
 });
