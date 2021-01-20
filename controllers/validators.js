@@ -31,4 +31,14 @@ module.exports = {
       res.status(400).send();
     }
   },
+
+  validateOrder(req, res, next) {
+    const customerId = Number(req.body.customerId);
+
+    if (customerId) {
+      next();
+    } else {
+      res.status(400).send();
+    }
+  },
 };

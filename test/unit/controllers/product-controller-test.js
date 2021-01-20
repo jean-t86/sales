@@ -207,7 +207,7 @@ describe('Product controller', function () {
     it('returns 404 is findByPk returns null', async function () {
       const fake = sinon.fake.returns(null);
       sinon.replace(ProductRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = product;
 
       await request(server)
         .get(`/products/${id}`)
@@ -217,7 +217,7 @@ describe('Product controller', function () {
     it('calls findByPk on product repository', async function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = product;
 
       await request(server)
         .get(`/products/${id}`)
@@ -229,7 +229,7 @@ describe('Product controller', function () {
     it('calls findByPk with the id as argument', async function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = product;
 
       await request(server)
         .get(`/products/${id}`)
@@ -241,7 +241,7 @@ describe('Product controller', function () {
     it('returns a product if found', function () {
       const fake = sinon.fake.returns(product);
       sinon.replace(ProductRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = product;
 
       return request(server)
         .get(`/products/${id}`)

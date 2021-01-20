@@ -207,7 +207,7 @@ describe('Customer controller', function () {
     it('returns 404 is findByPk returns null', async function () {
       const fake = sinon.fake.returns(null);
       sinon.replace(CustomerRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = customer;
 
       await request(server)
         .get(`/customers/${id}`)
@@ -217,7 +217,7 @@ describe('Customer controller', function () {
     it('calls findByPk on customer repository', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = customer;
 
       await request(server)
         .get(`/customers/${id}`)
@@ -229,7 +229,7 @@ describe('Customer controller', function () {
     it('calls findByPk with the id as argument', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = customer;
 
       await request(server)
         .get(`/customers/${id}`)
@@ -241,7 +241,7 @@ describe('Customer controller', function () {
     it('returns a customer if found', function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'findByPk', fake);
-      const id = '1';
+      const { id } = customer;
 
       return request(server)
         .get(`/customers/${id}`)
