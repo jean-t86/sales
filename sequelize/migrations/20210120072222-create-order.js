@@ -10,6 +10,12 @@ module.exports = {
       customerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Customers',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
