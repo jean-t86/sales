@@ -72,4 +72,11 @@ describe('Customer sequelize model', function () {
       assert.ok(!spy.threw('SequelizeValidationError:'));
     }
   });
+
+  it('has the correct association with Order', function () {
+    expect(Customer.associations).to.have.ownProperty('Orders');
+    expect(Customer.associations.Orders.associationAccessor).to.equal('Orders');
+    expect(Customer.associations.Orders.associationType).to.equal('HasMany');
+    expect(Customer.associations.Orders.foreignKey).to.equal('customerId');
+  });
 });
