@@ -19,6 +19,15 @@ module.exports = {
     }
   },
 
+  async findByCustomerId(req, res) {
+    const customers = await OrderRepo.findByCustomerId(req.body.id);
+    if (customers) {
+      res.status(200).send(customers);
+    } else {
+      res.status(404).send();
+    }
+  },
+
   async create(req, res) {
     const { customerId } = req.body;
 

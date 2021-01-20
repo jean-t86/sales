@@ -166,7 +166,7 @@ describe('Order controller', function () {
         .expect(400);
     });
 
-    it('returns 404 is findByPk returns null', async function () {
+    it('returns 404 if findByPk returns null', async function () {
       const fake = sinon.fake.returns(null);
       sinon.replace(OrderRepo, 'findByPk', fake);
       const { id } = order;
@@ -213,6 +213,63 @@ describe('Order controller', function () {
           assert.deepEqual(fetchedOrder.id, order.id);
           assert.deepEqual(fetchedOrder.customerId, order.customerId);
         });
+    });
+  });
+
+  describe('findByCustomerId', function () {
+    it('returns 400 if customerId is not a number', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'findByCustomerId', fake);
+      const customerId = 'dsf';
+
+      await request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(400);
+    });
+
+    it('returns 404 if no orders found', async function () {
+      const fake = sinon.fake.returns(null);
+      sinon.replace(OrderRepo, 'findByCustomerId', fake);
+      const { customerId } = order;
+
+      await request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(404);
+    });
+
+    it('calls findByCustomerId on OrderRepo', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'findByCustomerId', fake);
+      const { customerId } = order;
+
+      await request(server)
+        .get(`/orders/customer/${customerId}`);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls findByCustomerId with the customerId as argument', async function () {
+      const fake = sinon.fake.returns(order);
+      sinon.replace(OrderRepo, 'findByCustomerId', fake);
+      const { customerId } = order;
+
+      await request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(200);
+
+      assert.equal(fake.getCall(0).args[0], customerId);
+    });
+
+    it('returns an array of orders if found', async function () {
+      const fake = sinon.fake.returns(orders);
+      sinon.replace(OrderRepo, 'findByCustomerId', fake);
+      const { customerId } = order;
+
+      const response = await request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(200);
+
+      assert.deepEqual(response.body, orders);
     });
   });
 

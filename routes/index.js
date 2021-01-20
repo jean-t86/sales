@@ -25,8 +25,10 @@ router.post('/customers', Validators.validateCustomer, CustomerController.create
 router.put('/customers/:id', Validators.validateCustomer, CustomerController.update);
 router.delete('/customers/:id', Validators.validateId, CustomerController.delete);
 
+router.param('customerId', Validators.validateId);
 router.get('/orders', OrderController.findAll);
 router.get('/orders/:id', OrderController.findByPk);
+router.get('/orders/customer/:customerId', OrderController.findByCustomerId);
 router.post('/orders', Validators.validateOrder, OrderController.create);
 router.put('/orders/:id', Validators.validateOrder, OrderController.update);
 router.delete('/orders/:id', Validators.validateId, OrderController.delete);

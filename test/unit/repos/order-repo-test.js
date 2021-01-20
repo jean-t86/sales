@@ -15,7 +15,7 @@ describe('OrderRepo', function () {
   beforeEach(function () {
     order = {
       id: faker.random.number(),
-      orderId: faker.random.number(),
+      customerId: faker.random.number(),
     };
 
     orders = [
@@ -76,6 +76,49 @@ describe('OrderRepo', function () {
       const result = await OrderRepo.findByPk(id);
 
       assert.deepEqual(result, order);
+    });
+  });
+
+  describe('find by customer id', function () {
+    it('calls findAll on Order model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Order, 'findAll', fake);
+      const { customerId } = order;
+
+      await OrderRepo.findByCustomerId(customerId);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls findAll with the correct where clause', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Order, 'findAll', fake);
+      const { customerId } = order;
+
+      await OrderRepo.findByCustomerId(customerId);
+      assert.deepEqual(fake.getCall(0).args[0], {
+        where: {
+          customerId,
+        },
+      });
+    });
+
+    it('returns the result of calling findAll on Order model', async function () {
+      const fake = sinon.fake.returns(orders);
+      sinon.replace(Order, 'findAll', fake);
+      const { customerId } = order;
+
+      const result = await OrderRepo.findByCustomerId(customerId);
+      assert.deepEqual(result, orders);
+    });
+
+    it('returns an empty array if no orders found', async function () {
+      const fake = sinon.fake.returns([]);
+      sinon.replace(Order, 'findAll', fake);
+      const { customerId } = order;
+
+      const result = await OrderRepo.findByCustomerId(customerId);
+      assert.deepEqual(result, []);
     });
   });
 

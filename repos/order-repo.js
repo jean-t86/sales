@@ -11,6 +11,15 @@ module.exports = {
     return order;
   },
 
+  async findByCustomerId(customerId) {
+    const result = await Order.findAll({
+      where: {
+        customerId,
+      },
+    });
+    return result;
+  },
+
   async create(customerId) {
     const customer = await Order.create({
       customerId,
