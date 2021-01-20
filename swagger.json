@@ -560,6 +560,48 @@
           }
         }
       }
+    },
+    "/orders/customer/{customerId}": {
+      "get": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Get orders by customerId",
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "The ID of the customer",
+            "required": true,
+            "style": "simple",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid customerId supplied"
+          },
+          "404": {
+            "description": "No orders found"
+          }
+        }
+      }
     }
   },
   "components": {
