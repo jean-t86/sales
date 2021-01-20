@@ -11,12 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Order.belongsTo(models.Customer, {
-        foreignKey: {
-          name: 'customerId',
-          allowNull: false,
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
+        foreignKey: 'customerId',
       });
     }
   }
