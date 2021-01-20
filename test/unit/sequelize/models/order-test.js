@@ -22,4 +22,10 @@ describe('Order sequelize model', function () {
     assert.deepEqual(Order.tableAttributes.customerId.type, Sequelize.DataTypes.INTEGER());
     expect(Order.tableAttributes.customerId.allowNull).to.equal(false);
   });
+
+  it('has the correct association with Customer', function () {
+    expect(Order.associations).to.have.ownProperty('Customer');
+    expect(Order.associations.Customer.associationAccessor).to.equal('Customer');
+    expect(Order.associations.Customer.associationType).to.equal('BelongsTo');
+  });
 });
