@@ -170,6 +170,27 @@ describe('Order route integration test', async function () {
     });
   });
 
+  describe('GET order by customerId', function () {
+    it('retuns 400 if id is not a number', function () {
+      const customerId = 'pdi';
+
+      return request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(400);
+    });
+
+    it('returns an array', function () {
+      const { customerId } = order;
+      return request(server)
+        .get(`/orders/customer/${customerId}`)
+        .expect(200)
+        .then((res) => {
+          const orders = res.body;
+          expect(orders).to.nested.instanceOf(Array);
+        });
+    });
+  });
+
   describe('PUT order by id', function () {
     it('returns 400 if id is not a number', function () {
       const { id } = order;
