@@ -27,6 +27,18 @@ async function createCustomer() {
   return newCustomer.body.id;
 }
 
+async function createProduct() {
+  const newProduct = await request(server)
+    .post('/products')
+    .send({
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      stock: faker.random.number(),
+    })
+    .expect(201);
+  return newProduct.body.id;
+}
+
 describe('Order route integration test', async function () {
   let order;
 
@@ -116,6 +128,61 @@ describe('Order route integration test', async function () {
       const createdOrder = response.body;
       expect(createdOrder).to.haveOwnProperty('id');
       assert.ok(createdOrder.id);
+    });
+  });
+
+  describe('POST a product to an order', function () {
+    it('retuns 400 if id is not a number', function () {
+      const id = 'sdf';
+      const productId = faker.random.number();
+
+      return request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .expect(400);
+    });
+
+    it('retuns 400 if productId is not a number', function () {
+      const { id } = order;
+      const productId = 'afe';
+
+      return request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .expect(400);
+    });
+
+    it('returns 201 when product is added to order', async function () {
+      const customerId = await createCustomer();
+      const productId = await createProduct();
+      const newOrder = await request(server)
+        .post('/orders')
+        .send({
+          customerId,
+        })
+        .expect(201);
+
+      await request(server)
+        .post(`/orders/${newOrder.body.id}/product/${productId}`)
+        .expect(201);
+    });
+
+    it('returns the order and its products', async function () {
+      const customerId = await createCustomer();
+      const productId = await createProduct();
+      const newOrder = await request(server)
+        .post('/orders')
+        .send({
+          customerId,
+        })
+        .expect(201);
+
+      const orderWithProducts = await request(server)
+        .post(`/orders/${newOrder.body.id}/product/${productId}`)
+        .expect(201);
+
+      assert.equal(orderWithProducts.body.id, newOrder.body.id);
+      assert.equal(orderWithProducts.body.customerId, customerId);
+      expect(orderWithProducts.body).to.haveOwnProperty('Products');
+      expect(orderWithProducts.body.Products).to.be.instanceOf(Array);
     });
   });
 
