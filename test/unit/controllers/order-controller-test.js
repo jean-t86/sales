@@ -3,7 +3,7 @@
 /* eslint-disable prefer-arrow-callback */
 
 const { before } = require('mocha');
-const { assert } = require('chai');
+const { assert, expect } = require('chai');
 const sinon = require('sinon');
 const faker = require('faker');
 const request = require('supertest');
@@ -13,6 +13,7 @@ const OrderRepo = require('../../../repos/order-repo.js');
 describe('Order controller', function () {
   let order;
   let orders;
+  let orderWithProducts;
 
   before(function (done) {
     if (server.listening) {
@@ -26,11 +27,23 @@ describe('Order controller', function () {
     order = {
       id: faker.random.number(),
       customerId: faker.random.number(),
-      products: [],
+    };
+
+    orderWithProducts = {
+      id: faker.random.number(),
+      customerId: faker.random.number(),
+      Products: [
+        {
+          id: faker.random.number(),
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          stock: faker.random.number(),
+        },
+      ],
     };
 
     orders = [
-      order,
+      orderWithProducts,
     ];
   });
 
@@ -117,7 +130,7 @@ describe('Order controller', function () {
     });
 
     it('returns 400 if customerId is undefined', async function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake();
       sinon.replace(OrderRepo, 'create', fake);
 
       await request(server)
@@ -127,7 +140,7 @@ describe('Order controller', function () {
     });
 
     it('returns 400 if customerId is invalid', async function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake();
       sinon.replace(OrderRepo, 'create', fake);
       const customerId = 'df';
 
@@ -143,16 +156,83 @@ describe('Order controller', function () {
       const fake = sinon.fake.returns(order);
       sinon.replace(OrderRepo, 'create', fake);
 
-      await request(server)
+      const result = await request(server)
         .post('/orders')
         .send({
           customerId: order.customerId,
         })
-        .expect(201)
-        .then((res) => {
-          const createdOrder = res.body;
-          assert.deepEqual(createdOrder, order);
-        });
+        .expect(201);
+
+      assert.deepEqual(result.body, order);
+    });
+  });
+
+  describe('addProduct', async function () {
+    it('calls addProduct on OrderRepo', async function () {
+      const fake = sinon.fake.returns(order);
+      sinon.replace(OrderRepo, 'addProduct', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .send()
+        .expect(201);
+
+      assert.ok(fake.calledOnce);
+    });
+
+    it('calls addProduct with the correct arguments', async function () {
+      const fake = sinon.fake.returns(order);
+      sinon.replace(OrderRepo, 'addProduct', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .send()
+        .expect(201);
+
+      assert.deepEqual(fake.getCall(0).args[0], id);
+      assert.deepEqual(fake.getCall(0).args[1], productId);
+    });
+
+    it('returns 400 if orderId is not a number', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'addProduct', fake);
+      const id = 'dfr';
+      const productId = faker.random.number();
+
+      await request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .send()
+        .expect(400);
+    });
+
+    it('returns 400 if productId is not a number', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'addProduct', fake);
+      const { id } = order;
+      const productId = 'fge';
+
+      await request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .send()
+        .expect(400);
+    });
+
+    it('returns the order with its products', async function () {
+      const fake = sinon.fake.returns(orderWithProducts);
+      sinon.replace(OrderRepo, 'addProduct', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      const result = await request(server)
+        .post(`/orders/${id}/product/${productId}`)
+        .send()
+        .expect(201);
+
+      assert.deepEqual(result.body, orderWithProducts);
     });
   });
 
@@ -178,9 +258,9 @@ describe('Order controller', function () {
     });
 
     it('calls findByPk on order repository', async function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake.returns(orderWithProducts);
       sinon.replace(OrderRepo, 'findByPk', fake);
-      const { id } = order;
+      const { id } = orderWithProducts;
 
       await request(server)
         .get(`/orders/${id}`)
@@ -190,9 +270,9 @@ describe('Order controller', function () {
     });
 
     it('calls findByPk with the id as argument', async function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake.returns(orderWithProducts);
       sinon.replace(OrderRepo, 'findByPk', fake);
-      const { id } = order;
+      const { id } = orderWithProducts;
 
       await request(server)
         .get(`/orders/${id}`)
@@ -202,17 +282,19 @@ describe('Order controller', function () {
     });
 
     it('returns an order if found', function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake.returns(orderWithProducts);
       sinon.replace(OrderRepo, 'findByPk', fake);
-      const { id } = order;
+      const { id } = orderWithProducts;
 
       return request(server)
         .get(`/orders/${id}`)
         .expect(200)
         .then((res) => {
           const fetchedOrder = res.body;
-          assert.deepEqual(fetchedOrder.id, order.id);
-          assert.deepEqual(fetchedOrder.customerId, order.customerId);
+          assert.deepEqual(fetchedOrder.id, orderWithProducts.id);
+          assert.deepEqual(fetchedOrder.customerId, orderWithProducts.customerId);
+          expect(fetchedOrder).to.haveOwnProperty('Products');
+          expect(fetchedOrder.Products).to.be.instanceOf(Array);
         });
     });
 

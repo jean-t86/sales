@@ -42,6 +42,19 @@ module.exports = {
     }
   },
 
+  async addProduct(req, res) {
+    const { orderId } = req.body;
+    const { productId } = req.body;
+
+    const result = await OrderRepo.addProduct(orderId, productId);
+
+    if (result) {
+      res.status(201).send(result);
+    } else {
+      res.status(400).send();
+    }
+  },
+
   async update(req, res) {
     const { customerId } = req.body;
 

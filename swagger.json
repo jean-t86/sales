@@ -602,6 +602,57 @@
           }
         }
       }
+    },
+    "/orders/{id}/product/{productId}": {
+      "post": {
+        "tags": [
+          "orders"
+        ],
+        "summary": "Add a product to an order",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the order",
+            "required": true,
+            "style": "simple",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The ID of the product",
+            "required": true,
+            "style": "simple",
+            "explode": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/OrderProductsResponse"                
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid id or productId supplied"
+          },
+          "404": {
+            "description": "No orders or products found that matches the provided ids"
+          }
+        }
+      }
     }
   },
   "components": {

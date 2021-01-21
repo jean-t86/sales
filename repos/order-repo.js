@@ -1,11 +1,13 @@
 const { Order } = require('../sequelize/models');
 const { Product } = require('../sequelize/models');
+const { OrderLine } = require('../sequelize/models');
 
 module.exports = {
   async findAll() {
     const orders = await Order.findAll({
       include: [{
         model: Product,
+        through: { attributes: [] },
       }],
     });
     return orders;
@@ -15,9 +17,19 @@ module.exports = {
     const order = await Order.findByPk(id, {
       include: [{
         model: Product,
+        through: { attributes: [] },
       }],
     });
     return order;
+  },
+
+  async findByCustomerId(customerId) {
+    const result = await Order.findAll({
+      where: {
+        customerId,
+      },
+    });
+    return result;
   },
 
   async create(customerId) {
@@ -25,6 +37,16 @@ module.exports = {
       customerId,
     });
     return customer;
+  },
+
+  async addProduct(id, productId) {
+    const result = await OrderLine.create({
+      orderId: id,
+      productId,
+    });
+
+    if (!result) return null;
+    return this.findByPk(id);
   },
 
   async update(id, customerId) {
