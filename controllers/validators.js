@@ -13,7 +13,7 @@ module.exports = {
     const { name } = req.body;
     const stock = Number(req.body.stock);
 
-    if (name && stock) {
+    if (name && !Number.isNaN(stock)) {
       next();
     } else {
       res.status(400).send();

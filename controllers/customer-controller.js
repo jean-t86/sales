@@ -19,16 +19,23 @@ module.exports = {
     }
   },
 
-  async create(req, res) {
+  async create(req, res, next) {
     const { firstName } = req.body;
     const { lastName } = req.body;
     const { email } = req.body;
 
-    const result = await CustomerRepo.create(
-      firstName,
-      lastName,
-      email,
-    );
+    let result;
+    try {
+      result = await CustomerRepo.create(
+        firstName,
+        lastName,
+        email,
+      );
+    } catch (err) {
+      res.status(500).send();
+      next(err);
+      return;
+    }
 
     if (result) {
       res.status(201).send(result);
@@ -37,17 +44,25 @@ module.exports = {
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     const { firstName } = req.body;
     const { lastName } = req.body;
     const { email } = req.body;
 
-    const result = await CustomerRepo.update(
-      req.body.id,
-      firstName,
-      lastName,
-      email,
-    );
+    let result;
+    try {
+      result = await CustomerRepo.update(
+        req.body.id,
+        firstName,
+        lastName,
+        email,
+      );
+    } catch (err) {
+      res.status(500).send();
+      next(err);
+      return;
+    }
+
     if (result) {
       res.status(200).send(result);
     } else {
