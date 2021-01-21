@@ -769,7 +769,7 @@
           "customerId": {
             "type": "integer"
           },
-          "products": {
+          "Products": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProductResponse"
