@@ -55,9 +55,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "No products found"
           }
         }
       },
@@ -230,9 +227,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "No customers found"
           }
         }
       },
@@ -405,9 +399,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "No orders found"
           }
         }
       },
@@ -596,9 +587,6 @@
           },
           "400": {
             "description": "Invalid customerId supplied"
-          },
-          "404": {
-            "description": "No orders found"
           }
         }
       }
