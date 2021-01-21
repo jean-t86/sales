@@ -168,26 +168,24 @@ describe('Order route integration test', async function () {
         .expect(200);
       assert.equal(response.body.id, newOrder.body.id);
     });
-  });
 
-  describe('GET order by customerId', function () {
-    it('retuns 400 if id is not a number', function () {
-      const customerId = 'pdi';
+    it('returns all products associated with the order', async function () {
+      const customerId = await createCustomer();
 
-      return request(server)
-        .get(`/orders/customer/${customerId}`)
-        .expect(400);
-    });
+      const newOrder = await request(server)
+        .post('/orders')
+        .send({
+          customerId,
+        })
+        .expect(201);
 
-    it('returns an array', function () {
-      const { customerId } = order;
-      return request(server)
-        .get(`/orders/customer/${customerId}`)
-        .expect(200)
-        .then((res) => {
-          const orders = res.body;
-          expect(orders).to.nested.instanceOf(Array);
-        });
+      const response = await request(server)
+        .get(`/orders/${newOrder.body.id}`)
+        .expect(200);
+
+      assert.equal(response.body.id, newOrder.body.id);
+      expect(response.body).to.haveOwnProperty('Products');
+      expect(response.body.Products).to.be.instanceOf(Array);
     });
   });
 

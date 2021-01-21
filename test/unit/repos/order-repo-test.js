@@ -5,6 +5,7 @@
 const sinon = require('sinon');
 const { assert } = require('chai');
 const faker = require('faker');
+const { Product } = require('../../../sequelize/models');
 const { Order } = require('../../../sequelize/models');
 const OrderRepo = require('../../../repos/order-repo.js');
 
@@ -45,6 +46,19 @@ describe('OrderRepo', function () {
 
       assert.deepEqual(result, orders);
     });
+
+    it('calls findAll with correct include as argument', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Order, 'findAll', fake);
+
+      await OrderRepo.findAll();
+
+      assert.deepEqual(fake.getCall(0).args[0], {
+        include: [{
+          model: Product,
+        }],
+      });
+    });
   });
 
   describe('findByPk', function () {
@@ -68,6 +82,20 @@ describe('OrderRepo', function () {
       assert.equal(fake.getCall(0).args[0], id);
     });
 
+    it('calls findByPk with correct include as argument', async function () {
+      const fake = sinon.fake();
+      sinon.replace(Order, 'findByPk', fake);
+      const { id } = order;
+
+      await OrderRepo.findByPk(id);
+
+      assert.deepEqual(fake.getCall(0).args[1], {
+        include: [{
+          model: Product,
+        }],
+      });
+    });
+
     it('returns the result of calling findByPk on Order model', async function () {
       const fake = sinon.fake.returns(order);
       sinon.replace(Order, 'findByPk', fake);
@@ -76,49 +104,6 @@ describe('OrderRepo', function () {
       const result = await OrderRepo.findByPk(id);
 
       assert.deepEqual(result, order);
-    });
-  });
-
-  describe('find by customer id', function () {
-    it('calls findAll on Order model', async function () {
-      const fake = sinon.fake();
-      sinon.replace(Order, 'findAll', fake);
-      const { customerId } = order;
-
-      await OrderRepo.findByCustomerId(customerId);
-
-      assert.ok(fake.calledOnce);
-    });
-
-    it('calls findAll with the correct where clause', async function () {
-      const fake = sinon.fake();
-      sinon.replace(Order, 'findAll', fake);
-      const { customerId } = order;
-
-      await OrderRepo.findByCustomerId(customerId);
-      assert.deepEqual(fake.getCall(0).args[0], {
-        where: {
-          customerId,
-        },
-      });
-    });
-
-    it('returns the result of calling findAll on Order model', async function () {
-      const fake = sinon.fake.returns(orders);
-      sinon.replace(Order, 'findAll', fake);
-      const { customerId } = order;
-
-      const result = await OrderRepo.findByCustomerId(customerId);
-      assert.deepEqual(result, orders);
-    });
-
-    it('returns an empty array if no orders found', async function () {
-      const fake = sinon.fake.returns([]);
-      sinon.replace(Order, 'findAll', fake);
-      const { customerId } = order;
-
-      const result = await OrderRepo.findByCustomerId(customerId);
-      assert.deepEqual(result, []);
     });
   });
 
