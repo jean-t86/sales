@@ -1,4 +1,4 @@
-const { ErrorHandler } = require('../helpers/error.js');
+const { ErrorResponse } = require('../helpers/error.js');
 const CustomerRepo = require('../repos/customer-repo.js');
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
         email,
       );
     } catch (err) {
-      next(new ErrorHandler(500, err.message));
+      next(new ErrorResponse(500, err.message));
       return;
     }
 
@@ -58,7 +58,7 @@ module.exports = {
         email,
       );
     } catch (err) {
-      next(new ErrorHandler(500, err.message));
+      next(new ErrorResponse(500, err.message));
       return;
     }
 
