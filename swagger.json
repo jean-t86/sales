@@ -400,7 +400,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/OrderResponse"
+                    "$ref": "#/components/schemas/OrderProductsResponse"
                   }
                 }
               }
@@ -469,7 +469,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderResponse"
+                  "$ref": "#/components/schemas/OrderProductsResponse"
                 }
               }
             }
@@ -709,6 +709,20 @@
         "properties": {
           "customerId": {
             "type": "integer"
+          }
+        }
+      },
+      "OrderProductsResponse": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "integer"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductResponse"
+            }
           }
         }
       }

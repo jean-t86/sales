@@ -1,23 +1,23 @@
 const { Order } = require('../sequelize/models');
+const { Product } = require('../sequelize/models');
 
 module.exports = {
   async findAll() {
-    const orders = await Order.findAll();
+    const orders = await Order.findAll({
+      include: [{
+        model: Product,
+      }],
+    });
     return orders;
   },
 
   async findByPk(id) {
-    const order = await Order.findByPk(id);
-    return order;
-  },
-
-  async findByCustomerId(customerId) {
-    const result = await Order.findAll({
-      where: {
-        customerId,
-      },
+    const order = await Order.findByPk(id, {
+      include: [{
+        model: Product,
+      }],
     });
-    return result;
+    return order;
   },
 
   async create(customerId) {
