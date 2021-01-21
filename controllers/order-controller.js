@@ -1,3 +1,4 @@
+const { ErrorHandler } = require('../helpers/error.js');
 const OrderRepo = require('../repos/order-repo.js');
 
 module.exports = {
@@ -37,8 +38,7 @@ module.exports = {
         customerId,
       );
     } catch (err) {
-      res.status(500).send();
-      next(err);
+      next(new ErrorHandler(500, err.message));
       return;
     }
 
@@ -57,8 +57,7 @@ module.exports = {
     try {
       result = await OrderRepo.addProduct(orderId, productId);
     } catch (err) {
-      res.status(500).send();
-      next(err);
+      next(new ErrorHandler(500, err.message));
       return;
     }
 
@@ -79,8 +78,7 @@ module.exports = {
         customerId,
       );
     } catch (err) {
-      res.status(500).send();
-      next(err);
+      next(new ErrorHandler(500, err.message));
       return;
     }
 
