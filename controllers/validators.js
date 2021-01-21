@@ -41,4 +41,17 @@ module.exports = {
       res.status(400).send();
     }
   },
+
+  validateOrderLine(req, res, next) {
+    const id = Number(req.params.id);
+    const productId = Number(req.params.productId);
+
+    if (id && productId) {
+      req.body.orderId = id;
+      req.body.productId = productId;
+      next();
+    } else {
+      res.status(400).send();
+    }
+  },
 };

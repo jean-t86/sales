@@ -13,7 +13,7 @@ const OrderRepo = require('../../../repos/order-repo.js');
 describe('OrderRepo', function () {
   let order;
   let orders;
-  let orderWithProduct;
+  let orderWithProducts;
 
   beforeEach(function () {
     order = {
@@ -21,10 +21,10 @@ describe('OrderRepo', function () {
       customerId: faker.random.number(),
     };
 
-    orderWithProduct = {
+    orderWithProducts = {
       id: faker.random.number(),
       customerId: faker.random.number(),
-      products: [
+      Products: [
         {
           id: faker.random.number(),
           name: faker.commerce.productName(),
@@ -35,7 +35,7 @@ describe('OrderRepo', function () {
     };
 
     orders = [
-      orderWithProduct,
+      orderWithProducts,
     ];
   });
 
@@ -112,13 +112,13 @@ describe('OrderRepo', function () {
     });
 
     it('returns the result of calling findByPk on Order model', async function () {
-      const fake = sinon.fake.returns(orderWithProduct);
+      const fake = sinon.fake.returns(orderWithProducts);
       sinon.replace(Order, 'findByPk', fake);
-      const { id } = orderWithProduct;
+      const { id } = orderWithProducts;
 
       const result = await OrderRepo.findByPk(id);
 
-      assert.deepEqual(result, orderWithProduct);
+      assert.deepEqual(result, orderWithProducts);
     });
   });
 
@@ -225,7 +225,7 @@ describe('OrderRepo', function () {
 
     it('returns the result of calling findByPk', async function () {
       sinon.replace(OrderLine, 'create', sinon.fake.returns(order));
-      const fake = sinon.fake.returns(orderWithProduct);
+      const fake = sinon.fake.returns(orderWithProducts);
       sinon.replace(OrderRepo, 'findByPk', fake);
 
       const { id } = order;
@@ -233,7 +233,7 @@ describe('OrderRepo', function () {
 
       const result = await OrderRepo.addProduct(id, productId);
 
-      assert.deepEqual(result, orderWithProduct);
+      assert.deepEqual(result, orderWithProducts);
     });
   });
 
