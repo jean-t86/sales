@@ -7,6 +7,7 @@ module.exports = {
     const orders = await Order.findAll({
       include: [{
         model: Product,
+        through: { attributes: [] },
       }],
     });
     return orders;
@@ -16,6 +17,7 @@ module.exports = {
     const order = await Order.findByPk(id, {
       include: [{
         model: Product,
+        through: { attributes: [] },
       }],
     });
     return order;

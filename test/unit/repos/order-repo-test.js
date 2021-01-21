@@ -71,6 +71,7 @@ describe('OrderRepo', function () {
       assert.deepEqual(fake.getCall(0).args[0], {
         include: [{
           model: Product,
+          through: { attributes: [] },
         }],
       });
     });
@@ -107,6 +108,7 @@ describe('OrderRepo', function () {
       assert.deepEqual(fake.getCall(0).args[1], {
         include: [{
           model: Product,
+          through: { attributes: [] },
         }],
       });
     });
