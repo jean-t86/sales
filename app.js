@@ -8,6 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 const indexRouter = require('./routes/index');
+const { handleError } = require('./helpers/error');
 
 const app = express();
 
@@ -25,5 +26,8 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use((err, req, res) => {
+  handleError(err, res);
+});
 
 module.exports = app;

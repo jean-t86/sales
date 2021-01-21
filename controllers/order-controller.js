@@ -1,3 +1,4 @@
+const { ErrorResponse } = require('../helpers/error.js');
 const OrderRepo = require('../repos/order-repo.js');
 
 module.exports = {
@@ -28,12 +29,18 @@ module.exports = {
     }
   },
 
-  async create(req, res) {
+  async create(req, res, next) {
     const { customerId } = req.body;
 
-    const result = await OrderRepo.create(
-      customerId,
-    );
+    let result;
+    try {
+      result = await OrderRepo.create(
+        customerId,
+      );
+    } catch (err) {
+      next(new ErrorResponse(500, err.message));
+      return;
+    }
 
     if (result) {
       res.status(201).send(result);
@@ -42,11 +49,17 @@ module.exports = {
     }
   },
 
-  async addProduct(req, res) {
+  async addProduct(req, res, next) {
     const { orderId } = req.body;
     const { productId } = req.body;
 
-    const result = await OrderRepo.addProduct(orderId, productId);
+    let result;
+    try {
+      result = await OrderRepo.addProduct(orderId, productId);
+    } catch (err) {
+      next(new ErrorResponse(500, err.message));
+      return;
+    }
 
     if (result) {
       res.status(201).send(result);
@@ -55,13 +68,20 @@ module.exports = {
     }
   },
 
-  async update(req, res) {
+  async update(req, res, next) {
     const { customerId } = req.body;
 
-    const result = await OrderRepo.update(
-      req.body.id,
-      customerId,
-    );
+    let result;
+    try {
+      result = await OrderRepo.update(
+        req.body.id,
+        customerId,
+      );
+    } catch (err) {
+      next(new ErrorResponse(500, err.message));
+      return;
+    }
+
     if (result) {
       res.status(200).send(result);
     } else {

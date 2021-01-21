@@ -48,6 +48,7 @@ module.exports = {
       description,
       stock,
     );
+
     if (result) {
       res.status(200).send(result);
     } else {
