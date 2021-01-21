@@ -1,5 +1,6 @@
 const { Order } = require('../sequelize/models');
 const { Product } = require('../sequelize/models');
+const { OrderLine } = require('../sequelize/models');
 
 module.exports = {
   async findAll() {
@@ -25,6 +26,16 @@ module.exports = {
       customerId,
     });
     return customer;
+  },
+
+  async addProduct(id, productId) {
+    const result = await OrderLine.create({
+      orderId: id,
+      productId,
+    });
+
+    if (!result) return null;
+    return this.findByPk(id);
   },
 
   async update(id, customerId) {

@@ -6,12 +6,14 @@ const sinon = require('sinon');
 const { assert } = require('chai');
 const faker = require('faker');
 const { Product } = require('../../../sequelize/models');
+const { OrderLine } = require('../../../sequelize/models');
 const { Order } = require('../../../sequelize/models');
 const OrderRepo = require('../../../repos/order-repo.js');
 
 describe('OrderRepo', function () {
   let order;
   let orders;
+  let orderWithProduct;
 
   beforeEach(function () {
     order = {
@@ -19,8 +21,21 @@ describe('OrderRepo', function () {
       customerId: faker.random.number(),
     };
 
+    orderWithProduct = {
+      id: faker.random.number(),
+      customerId: faker.random.number(),
+      products: [
+        {
+          id: faker.random.number(),
+          name: faker.commerce.productName(),
+          description: faker.commerce.productDescription(),
+          stock: faker.random.number(),
+        },
+      ],
+    };
+
     orders = [
-      order,
+      orderWithProduct,
     ];
   });
 
@@ -97,13 +112,13 @@ describe('OrderRepo', function () {
     });
 
     it('returns the result of calling findByPk on Order model', async function () {
-      const fake = sinon.fake.returns(order);
+      const fake = sinon.fake.returns(orderWithProduct);
       sinon.replace(Order, 'findByPk', fake);
-      const { id } = order;
+      const { id } = orderWithProduct;
 
       const result = await OrderRepo.findByPk(id);
 
-      assert.deepEqual(result, order);
+      assert.deepEqual(result, orderWithProduct);
     });
   });
 
@@ -142,6 +157,83 @@ describe('OrderRepo', function () {
       );
 
       assert.deepEqual(result, order);
+    });
+  });
+
+  describe('addProduct', function () {
+    it('calls create on OrderLine model', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderLine, 'create', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await OrderRepo.addProduct(id, productId);
+
+      assert(fake.calledOnce);
+    });
+
+    it('calls create on OrderLine model with correct arguments', async function () {
+      const fake = sinon.fake();
+      sinon.replace(OrderLine, 'create', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await OrderRepo.addProduct(id, productId);
+
+      assert.deepEqual(fake.getCall(0).args[0], {
+        orderId: id,
+        productId,
+      });
+    });
+
+    it('retuns null if result of create on OrderLine is null', async function () {
+      const fake = sinon.fake.returns(null);
+      sinon.replace(OrderLine, 'create', fake);
+      const { id } = order;
+      const productId = faker.random.number();
+
+      const result = await OrderRepo.addProduct(id, productId);
+
+      assert.ok(!result);
+    });
+
+    it('calls findByPk on OrderLine if previous call to create does not return null', async function () {
+      sinon.replace(OrderLine, 'create', sinon.fake.returns(order));
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'findByPk', fake);
+
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await OrderRepo.addProduct(id, productId);
+
+      assert(fake.calledOnce);
+    });
+
+    it('calls findByPK with the passed in parameter', async function () {
+      sinon.replace(OrderLine, 'create', sinon.fake.returns(order));
+      const fake = sinon.fake();
+      sinon.replace(OrderRepo, 'findByPk', fake);
+
+      const { id } = order;
+      const productId = faker.random.number();
+
+      await OrderRepo.addProduct(id, productId);
+
+      assert.equal(fake.getCall(0).args[0], id);
+    });
+
+    it('returns the result of calling findByPk', async function () {
+      sinon.replace(OrderLine, 'create', sinon.fake.returns(order));
+      const fake = sinon.fake.returns(orderWithProduct);
+      sinon.replace(OrderRepo, 'findByPk', fake);
+
+      const { id } = order;
+      const productId = faker.random.number();
+
+      const result = await OrderRepo.addProduct(id, productId);
+
+      assert.deepEqual(result, orderWithProduct);
     });
   });
 
