@@ -121,7 +121,7 @@ describe('Customer controller', function () {
       assert.deepEqual(fake.getCall(0).args[2], customer.email);
     });
 
-    it('returns 400 if first firstName is undefined', async function () {
+    it('returns 400 if firstName is undefined', async function () {
       const fake = sinon.fake.returns(customer);
       sinon.replace(CustomerRepo, 'create', fake);
 
