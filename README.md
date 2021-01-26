@@ -1,5 +1,7 @@
 # Sales API
 
+![Node.js CI](https://github.com/jean-t86/sales/workflows/Node.js%20CI/badge.svg)
+
 ## Table of Contents
 * [Description](#description)
 * [General information](#general-information)
