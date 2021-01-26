@@ -1,0 +1,48 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x, 15.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: sales_db_dev
+          POSTGRES_USER: sales
+          POSTGRES_PASSWORD: sales
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+
+      - name: Migrate database
+        run: |
+          sudo npm install -g sequelize-cli
+          sequelize db:migrate
+
+      - name: Run tests
+        run: npm test
