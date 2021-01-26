@@ -420,7 +420,7 @@ describe('Customer controller', function () {
 
       return request(server)
         .delete(`/customers/${id}`)
-        .expect(204);
+        .expect(404);
     });
   });
 });
