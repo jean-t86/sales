@@ -1,6 +1,8 @@
 # Sales API
 
+![Release](https://img.shields.io/github/v/release/jean-t86/sales)
 ![Node.js CI](https://github.com/jean-t86/sales/workflows/Node.js%20CI/badge.svg)
+
 
 ## Table of Contents
 * [Description](#description)
