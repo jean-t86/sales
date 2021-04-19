@@ -80,7 +80,7 @@ Create a new user role:
 
 ```
 CREATE ROLE sales WITH LOGIN PASSWORD 'sales';
-ALTER ROLE me CREATEDB
+ALTER ROLE sales CREATEDB
 ```
 Exit psql:
 ```
