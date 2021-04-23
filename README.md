@@ -80,7 +80,7 @@ Create a new user role:
 
 ```
 CREATE ROLE sales WITH LOGIN PASSWORD 'sales';
-ALTER ROLE sales CREATEDB
+ALTER ROLE sales CREATEDB;
 ```
 Exit psql:
 ```
@@ -92,7 +92,7 @@ psql postgres -U sales
 ```
 Create the database:
 ```
-CREATE DATABASE api;
+CREATE DATABASE sales_db_dev;
 ```
 
 ### Create the tables
